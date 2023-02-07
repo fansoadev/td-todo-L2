@@ -1,11 +1,6 @@
 import React, {useState} from 'react';
-import { Checkbox, Col, Row } from 'antd';
-import './todo.css';
-
-
-const handelChange = (checkedValues) => {
-    console.log('checked in done = ', checkedValues);
-}
+import { Checkbox } from 'antd';
+// import './todo.css';
 
 const App = () => {
     const [todoList, setTodo] = useState([
@@ -27,35 +22,39 @@ const App = () => {
         },
     ])
 
-    const [doneList, setDone] = useState([
-        {
-            value: '',
-            label: ''
-        },
-    ]);
+    const [doneList, setDone] = useState([]);
 
     const onChange = (checkedValues) => {
-        const checkedValueItem = checkedValues[checkedValues.length - 1];
-
-        const newValue = todoList.filter(todo => todo.value === checkedValueItem);
-
+        const checkedValueItem = checkedValues.length && checkedValues[checkedValues.length - 1];
         setTodo(todoList.filter(todo => todo.value !== checkedValueItem));
+        
         const removedValue = todoList.filter(todo => todo.value === checkedValueItem);
         doneList.push(...removedValue)
-
-        console.log(removedValue);
+        
+        console.log(todoList);
     };
+
+    const handelChange = (checkedValues) => {
+        const checkedValueItem = checkedValues.length && checkedValues[checkedValues.length - 1];
+        setDone(doneList.filter(done => done.value !== checkedValueItem));
+
+        const removedValue = doneList.filter(done => done.value === checkedValueItem);
+        todoList.push(...removedValue)
+        
+        console.log(doneList);
+    };
+
     return(
         <div className='todo-done'>
             <div className='element'>
                 <h2>Todo List</h2>
-                <Checkbox.Group style={{ width: '100%', display: 'flex', flexDirection: 'column' }} onChange={onChange}>
+                <Checkbox.Group style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '18px', padding: '15px'}} onChange={onChange}>
                     {todoList.map(list => <Checkbox value={list.value}>{list.label}</Checkbox>)}
                 </Checkbox.Group>
             </div>
             <div className='element'>
                 <h2>Done List</h2>
-                <Checkbox.Group style={{ width: '100%', display: 'flex', flexDirection: 'column' }} onChange={handelChange}>
+                <Checkbox.Group style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '18px', padding: '15px' }} onChange={handelChange}>
                     {doneList.map(list => <Checkbox value={list.value}>{list.label}</Checkbox>)}
                 </Checkbox.Group>
             </div>
